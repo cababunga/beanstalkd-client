@@ -1,6 +1,6 @@
 {
   "name": "@cababunga/beanstalkd",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Beanstalkd client with async/await API, auto-reconnect and zero dependencies",
   "license": "ISC",
   "main": "beanstalk.js",
