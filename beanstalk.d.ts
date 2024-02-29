@@ -9,7 +9,7 @@ export default class Beanstalk {
      * @param options.maxDelay Maximum dealy between connection attempts [5000]
      * @param options.logger Optional logger function
      */
-    static connect(options: object): Promise<Beanstalk>;
+    static connect(options?: object): Promise<Beanstalk>;
 
     constructor(parseYaml?: (yaml: string) => object, logger?: (str: string) => any);
     connect(host: string, port: number, delay: number, maxDelay: number): Promise<this>;
@@ -49,7 +49,7 @@ export default class Beanstalk {
      * @param options.delay Delay in seconds before the job becomes ready for reservation
      * @param options.ttr Time in seconds for the job to be deleted or released after it's been reserved
      */
-    put(payload?: string | Buffer, options: {priority?: number, delay?: number, ttr?: number}): Promise<string>;
+    put(payload?: string | Buffer, options?: {priority?: number, delay?: number, ttr?: number}): Promise<string>;
 
     /**
      * Peek at the data for the job at the top of the ready queue of the tube currently in use.
@@ -134,7 +134,7 @@ export default class Beanstalk {
      * @param options.priority The new priority in seconds
      * @param options.delay The new delay in seconds
      */
-    release(id: number | string, options: {priority?: number, delay?: number}): Promise<void>;
+    release(id: number | string, options?: {priority?: number, delay?: number}): Promise<void>;
 
     /**
      * Bury the specified job and assign it the given priority. Responds with null if successful, 
@@ -143,7 +143,7 @@ export default class Beanstalk {
      * @param id The job ID to bury
      * @param options.priority The new priority to assign
      */
-    bury(id: number | string, options: {priority?: number}): Promise<void>;
+    bury(id: number | string, options?: {priority?: number}): Promise<void>;
 
     /**
      * Kick at most maxToKick delayed and buried jobs back into the active queue.
