@@ -4,12 +4,12 @@ const {beforeEach, test, afterEach} = require("node:test");
 const assert = require("node:assert").strict;
 
 const yaml = require("yaml");
-const beanstalk = require("./beanstalk");
+const Beanstalk = require("./beanstalk");
 
 let bs;
 
 beforeEach(async () => {
-    bs = await beanstalk({parseYaml: yaml.parse});
+    bs = await Beanstalk.connect({parseYaml: yaml.parse});
     const use = await bs.use("test");
     assert.equal(use, "test");
     const watch = await bs.watch("test");
@@ -28,7 +28,7 @@ test("put, reserve, delete sanity test", async () => {
     const put2 = await bs.put("testjob 2", {ttr:2});
     assert.match(put2, /^\d+$/);
     while (true) {
-        const job = await bs.reserve(0);
+        const job = await bs.reserve(0).catch(e => { if (e.message != "TIMED_OUT") throw e; });
         if (!job)
             break;
 
