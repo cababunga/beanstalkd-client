@@ -51,6 +51,7 @@ class Beanstalk extends events.EventEmitter {
                 for (const {expect, resolve, reject} of this.handlers)
                     expect == "" ? resolve() : reject(new Error("Beanstalk closed connection"));
                 this.handlers = [];
+                this.stream = null;
             });
         });
 
