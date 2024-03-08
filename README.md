@@ -1,9 +1,13 @@
 # Beanstalkd Client
 
+## Install
+
+    npm i @cababunga/beanstalkd
+
 ## Example
 
     const assert = require("node:assert").strict;
-    const beanstalk = require("beanstalk-client");
+    const beanstalk = require("@cababunga/beanstalkd");
     const bs = await beanstalk();
     await bs.watch("test");
     await bs.ignore("default");

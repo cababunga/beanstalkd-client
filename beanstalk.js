@@ -69,7 +69,10 @@ class Beanstalk extends events.EventEmitter {
                 break;
             }
             catch (e) {
-                delay = delay > maxDelay / 2 ? maxDelay : delay * 2;
+                if (delay < 0)
+                    throw e;
+
+                delay = delay * 2 > maxDelay ? maxDelay : delay * 2;
                 if (this.log)
                     this.log(`Can't connect to beanstalkd: ${e}. Sleeping for ${delay / 1000} s`);
                 await sleep(delay);
