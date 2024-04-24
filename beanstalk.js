@@ -18,7 +18,7 @@ class Beanstalk extends events.EventEmitter {
     }={}) {
         const beanstalk = new Beanstalk(parseYaml, logger);
         beanstalk.on("connect", () => logger && logger("Connected to beanstalkd"));
-        return beanstalk.connect(host, port, delay, maxDelay);
+        return beanstalk.connect(host, port, delay, maxDelay, true);
     }
 
     // These tree response types return payload, only one of them has payload serialized as YAML
@@ -44,7 +44,7 @@ class Beanstalk extends events.EventEmitter {
         this.stream = net.connect(port, host);
 
         await new Promise((resolve, reject) => {
-            this.stream.on("connect", () => { this.emit("connect"); resolve(); });
+            this.stream.on("connect", () => { this.emit("connect"); resolve(null); });
             this.stream.once("error", reject);
             this.stream.on("close", err => {
                 this.emit("close", err);
@@ -60,7 +60,7 @@ class Beanstalk extends events.EventEmitter {
         return this;
     }
 
-    async connect(host, port, delay, maxDelay) {
+    async connect(host, port, delay, maxDelay, initial) {
         const sleep = delay => new Promise(resolve => setTimeout(resolve, delay));
         
         while (this.reconnect) {
@@ -69,8 +69,13 @@ class Beanstalk extends events.EventEmitter {
                 break;
             }
             catch (e) {
-                if (delay < 0)
-                    throw e;
+                if (delay < 0) {
+                    if (initial)
+                        throw e;
+                    
+                    this.emit("error", e);
+                    return;
+                }
 
                 delay = delay * 2 > maxDelay ? maxDelay : delay * 2;
                 if (this.log)
@@ -81,7 +86,7 @@ class Beanstalk extends events.EventEmitter {
         this.once("close", async () => {
             if (this.log)
                 this.log("Disconnected from beanstalkd");
-            await this.connect(host, port, delay);
+            await this.connect(host, port, delay, maxDelay, false);
         });
 
         return this;
