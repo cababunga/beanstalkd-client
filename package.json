@@ -9,7 +9,8 @@
     "url": "https://github.com/cababunga/beanstalkd-client"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "bump": "npm version ${BUMP:=patch} && git push && git push --tags"
   },
   "devDependencies": {
     "@types/node": "^22.5.4",
