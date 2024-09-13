@@ -5,8 +5,8 @@ export default class Beanstalk {
      * @param options.host Host to connect to ["localhost"]
      * @param options.port Port to connect to [11300]
      * @param options.parseYaml Function for parsing YAML responses
-     * @param options.delay Inital delay in milliseconds between connection attempts [10]
-     * @param options.maxDelay Maximum dealy between connection attempts [5000]
+     * @param options.delay Initial delay in milliseconds between connection attempts [10]
+     * @param options.maxDelay Maximum delay between connection attempts [5000]
      * @param options.logger Optional logger function
      */
     static connect(options?: object): Promise<Beanstalk>;

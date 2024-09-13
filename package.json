@@ -12,6 +12,7 @@
     "test": "node --test"
   },
   "devDependencies": {
+    "@types/node": "^22.5.4",
     "yaml": "^2.4.0"
   }
 }

@@ -62,7 +62,7 @@ class Beanstalk extends events.EventEmitter {
 
     async connect(host, port, delay, maxDelay, initial) {
         const sleep = delay => new Promise(resolve => setTimeout(resolve, delay));
-        
+
         while (this.reconnect) {
             try {
                 await this._connect(host, port);
@@ -72,7 +72,7 @@ class Beanstalk extends events.EventEmitter {
                 if (delay < 0) {
                     if (initial)
                         throw e;
-                    
+
                     this.emit("error", e);
                     return;
                 }
@@ -94,9 +94,8 @@ class Beanstalk extends events.EventEmitter {
 
     async disconnect() {
         this.reconnect = false;
-        await this.quit();
         if (this.stream)
-            this.stream.end();
+            this.stream.destroy();
     }
 
     onData(data) {
@@ -218,7 +217,7 @@ const commands = [
     ["stats-job", "OK"],
     ["list-tubes", "OK"],
     ["list-tubes-watched", "OK"],
-    
+
     // Closes the connection, no response
     ["quit", ""],
 ];
@@ -246,4 +245,3 @@ for (const [command, response] of commands) {
 
 
 module.exports = Beanstalk;
-
